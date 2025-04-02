@@ -4,7 +4,7 @@ from itertools import chain
 from pathlib import Path
 import typing
 
-def your_function(
+def search_path(
     basepath: typing.Union[str, Path],
     query: str,
     verbose: bool = False,
