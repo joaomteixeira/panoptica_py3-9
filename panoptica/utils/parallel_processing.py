@@ -1,7 +1,7 @@
 import multiprocessing.pool
 from multiprocessing import Pool, Process
 from typing import Callable
-
+import typing
 
 class NoDaemonProcess(Process):
     """A subclass of `multiprocessing.Process` that overrides daemon behavior to always be non-daemonic.
@@ -21,12 +21,12 @@ class NoDaemonProcess(Process):
     def __init__(
         self,
         group: None = None,
-        target: Callable[..., object] | None = None,
-        name: str | None = None,
+        target: typing.Optional[Callable[..., object]] = None,
+        name: typing.Optional[str] = None,
         args=None,
         kwargs=None,
         *,
-        daemon: bool | None = None,
+        daemon: typing.Optional[bool] = None,
     ) -> None:
         if kwargs is None:
             kwargs = {}

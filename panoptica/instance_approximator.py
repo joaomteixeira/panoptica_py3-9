@@ -12,7 +12,7 @@ from panoptica.utils.processing_pair import (
     UnmatchedInstancePair,
 )
 from panoptica.utils.config import SupportsConfig
-
+import typing
 
 class InstanceApproximator(SupportsConfig, metaclass=ABCMeta):
     """
@@ -45,7 +45,7 @@ class InstanceApproximator(SupportsConfig, metaclass=ABCMeta):
     @abstractmethod
     def _approximate_instances(
         self, semantic_pair: SemanticPair, **kwargs
-    ) -> UnmatchedInstancePair | MatchedInstancePair:
+    ) -> typing.Union[UnmatchedInstancePair, MatchedInstancePair]:
         """
         Abstract method to be implemented by subclasses for instance approximation.
 
@@ -66,7 +66,7 @@ class InstanceApproximator(SupportsConfig, metaclass=ABCMeta):
 
     def approximate_instances(
         self, semantic_pair: SemanticPair, verbose: bool = False, **kwargs
-    ) -> UnmatchedInstancePair | MatchedInstancePair:
+    ) -> typing.Union[UnmatchedInstancePair, MatchedInstancePair]:
         """
         Perform instance approximation on the given SemanticPair.
 
@@ -125,7 +125,7 @@ class ConnectedComponentsInstanceApproximator(InstanceApproximator):
     >>> result = cca_approximator.approximate_instances(semantic_pair)
     """
 
-    def __init__(self, cca_backend: CCABackend | None = None) -> None:
+    def __init__(self, cca_backend: typing.Optional[CCABackend]  = None) -> None:
         """
         Initialize the ConnectedComponentsInstanceApproximator.
 

@@ -2,12 +2,13 @@ import numpy as np
 from scipy.ndimage import _ni_support, binary_erosion, generate_binary_structure
 from scipy.ndimage._nd_image import euclidean_feature_transform
 
+import typing
 
 def _compute_instance_average_symmetric_surface_distance(
     ref_labels: np.ndarray,
     pred_labels: np.ndarray,
-    ref_instance_idx: int | None = None,
-    pred_instance_idx: int | None = None,
+    ref_instance_idx: typing.Optional[int] = None,
+    pred_instance_idx: typing.Optional[int] = None,
     voxelspacing=None,
     connectivity=1,
 ):

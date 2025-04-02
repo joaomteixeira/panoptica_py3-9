@@ -5,6 +5,7 @@ import numpy as np
 import math
 from panoptica.utils.constants import CCABackend
 from panoptica.utils.numpy_utils import _get_bbox_nd
+import typing
 
 if TYPE_CHECKING:
     from panoptica.metrics import Metric
@@ -168,7 +169,7 @@ def _get_paired_crop(
     return _get_bbox_nd(combined, px_dist=px_pad)
 
 
-def _round_to_n(value: float | int, n_significant_digits: int = 2):
+def _round_to_n(value: typing.Union[float , int], n_significant_digits: int = 2):
     """Rounds a number to a specified number of significant digits.
 
     This function rounds the given value to the specified number of significant digits.

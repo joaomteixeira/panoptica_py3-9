@@ -2,7 +2,7 @@ from ruamel.yaml import YAML
 from pathlib import Path
 from panoptica.utils.filepath import config_by_name, config_dir_by_name
 from abc import ABC, abstractmethod
-
+import typing
 supported_helper_classes = []
 
 
@@ -15,7 +15,8 @@ def _register_helper_classes(yaml: YAML):
     [yaml.register_class(s) for s in supported_helper_classes]
 
 
-def _load_yaml(file: str | Path, registered_class=None):
+def _load_yaml(file: typing.Union[str, Path], registered_class=None):
+
     """Loads a YAML file into a Python dictionary or object, with optional class registration.
 
     Args:
@@ -37,7 +38,7 @@ def _load_yaml(file: str | Path, registered_class=None):
     return data
 
 
-def _save_yaml(data_dict: dict | object, out_file: str | Path, registered_class=None):
+def _save_yaml(data_dict: typing.Union[dict, object], out_file: typing.Union[str, Path], registered_class=None):
     """Saves a Python dictionary or object to a YAML file, with optional class registration.
 
     Args:
@@ -78,7 +79,7 @@ def _register_class_to_yaml(cls):
         supported_helper_classes.append(cls)
 
 
-def _load_from_config(cls, path: str | Path):
+def _load_from_config(cls, path: typing.Union[str , Path]):
     """Loads an instance of a class from a YAML configuration file.
 
     Args:
@@ -111,7 +112,7 @@ def _load_from_config_name(cls, name: str):
     return _load_from_config(cls, path)
 
 
-def _save_to_config(obj, path: str | Path):
+def _save_to_config(obj, path: typing.Union[str , Path]):
     """Saves an instance of a class to a YAML configuration file.
 
     Args:
@@ -164,7 +165,7 @@ class SupportsConfig:
         _register_class_to_yaml(cls)
 
     @classmethod
-    def load_from_config(cls, path: str | Path):
+    def load_from_config(cls, path: typing.Union[str , Path]):
         """Loads an instance of the class from a YAML file.
 
         Args:
@@ -193,7 +194,7 @@ class SupportsConfig:
         assert isinstance(obj, cls)
         return obj
 
-    def save_to_config(self, path: str | Path):
+    def save_to_config(self, path: typing.Union[str , Path]):
         """Saves the instance to a YAML configuration file.
 
         Args:

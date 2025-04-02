@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from enum import EnumMeta
-from typing import TYPE_CHECKING, Any, Callable
-
+from typing import TYPE_CHECKING, Any, Callable, List
+import typing
 import numpy as np
 
 from panoptica.metrics import (
@@ -53,11 +53,11 @@ class _Metric:
         self,
         reference_arr: np.ndarray,
         prediction_arr: np.ndarray,
-        ref_instance_idx: int | None = None,
-        pred_instance_idx: int | list[int] | None = None,
+        ref_instance_idx: typing.Optional[int] = None,
+        pred_instance_idx: typing.Optional[typing.Union[int, list[int]]] = None,
         *args,
         **kwargs,
-    ) -> int | float:
+    ) -> typing.Union[int , float]:
         """Calculates the metric between reference and prediction arrays.
 
         Args:
@@ -192,11 +192,11 @@ class Metric(_Enum_Compare):
         self,
         reference_arr: np.ndarray,
         prediction_arr: np.ndarray,
-        ref_instance_idx: int | None = None,
-        pred_instance_idx: int | list[int] | None = None,
+        ref_instance_idx: typing.Optional[int] = None,
+        pred_instance_idx: typing.Optional[typing.Union[int, list[int]]] = None,
         *args,
         **kwargs,
-    ) -> int | float:
+    ) -> typing.Union[int , float]:
         """Calculates the underlaying metric
 
         Args:
@@ -299,8 +299,8 @@ class Evaluation_Metric:
         self,
         name_id: str,
         metric_type: MetricType,
-        calc_func: Callable | None,
-        long_name: str | None = None,
+        calc_func: typing.Optional[typing.Callable],
+        long_name: typing.Optional[str] = None,
         was_calculated: bool = False,
         error: bool = False,
     ):
@@ -312,7 +312,7 @@ class Evaluation_Metric:
         self._was_calculated = was_calculated
         self._value = None
         self._error = error
-        self._error_obj: MetricCouldNotBeComputedException | None = None
+        self._error_obj: typing.Optional[MetricCouldNotBeComputedException]
 
     def __call__(self, result_obj: "PanopticaResult") -> Any:
         """If called, needs to return its way, raise error or calculate it
@@ -361,16 +361,14 @@ class Evaluation_Metric:
             return self.long_name + f" ({self.id})"
         else:
             return self.id
-
-
 class Evaluation_List_Metric:
     def __init__(
         self,
         name_id: Metric,
-        empty_list_std: float | None,
-        value_list: list[float] | None,  # None stands for not calculated
+        empty_list_std: typing.Optional[float],
+        value_list: typing.Optional[List[float]],  # None stands for not calculated
         is_edge_case: bool = False,
-        edge_case_result: float | None = None,
+        edge_case_result: typing.Optional[float] = None,
     ):
         """This represents the metrics resulting from a Metric calculated between paired instances (IoU, ASSD, Dice, ...)
 
@@ -381,12 +379,12 @@ class Evaluation_List_Metric:
         """
         self.id = name_id
         self.error = value_list is None
-        self.ALL: list[float] | None = value_list
+        self.ALL: typing.Optional[List[float]] = value_list
         if is_edge_case:
-            self.AVG: float | None = edge_case_result
-            self.SUM: None | float = edge_case_result
-            self.MIN: None | float = edge_case_result
-            self.MAX: None | float = edge_case_result
+            self.AVG: typing.Optional[float] = edge_case_result
+            self.SUM: typing.Optional[float] = edge_case_result
+            self.MIN: typing.Optional[float] = edge_case_result
+            self.MAX: typing.Optional[float] = edge_case_result
         else:
             self.AVG = (
                 None if self.ALL is None or len(self.ALL) == 0 else np.average(self.ALL)
@@ -407,7 +405,7 @@ class Evaluation_List_Metric:
             else empty_list_std if len(self.ALL) == 0 else np.std(self.ALL)
         )
 
-    def __getitem__(self, mode: MetricMode | str):
+    def __getitem__(self, mode: typing.Union[MetricMode, str]):
         if self.error:
             raise MetricCouldNotBeComputedException(
                 f"Metric {self.id} has not been calculated, add it to your eval_metrics"
@@ -420,6 +418,64 @@ class Evaluation_List_Metric:
             raise MetricCouldNotBeComputedException(
                 f"List_Metric {self.id} does not contain {mode} member"
             )
+
+# class Evaluation_List_Metric:
+#     def __init__(
+#         self,
+#         name_id: Metric,
+#         empty_list_std: typing.Optional[float],
+#         value_list: typing.Optional[list[float]],  # None stands for not calculated
+#         is_edge_case: bool = False,
+#         edge_case_result: float | None = None,
+#     ):
+#         """This represents the metrics resulting from a Metric calculated between paired instances (IoU, ASSD, Dice, ...)
+
+#         Args:
+#             name_id (Metric): code-name of this metric
+#             empty_list_std (float): Value for the standard deviation if the list of values is empty
+#             value_list (list[float] | None): List of values of that metric (only the TPs)
+#         """
+#         self.id = name_id
+#         self.error = value_list is None
+#         self.ALL: list[float] | None = value_list
+#         if is_edge_case:
+#             self.AVG: float | None = edge_case_result
+#             self.SUM: None | float = edge_case_result
+#             self.MIN: None | float = edge_case_result
+#             self.MAX: None | float = edge_case_result
+#         else:
+#             self.AVG = (
+#                 None if self.ALL is None or len(self.ALL) == 0 else np.average(self.ALL)
+#             )
+#             self.SUM = (
+#                 None if self.ALL is None or len(self.ALL) == 0 else np.sum(self.ALL)
+#             )
+#             self.MIN = (
+#                 None if self.ALL is None or len(self.ALL) == 0 else np.min(self.ALL)
+#             )
+#             self.MAX = (
+#                 None if self.ALL is None or len(self.ALL) == 0 else np.max(self.ALL)
+#             )
+
+#         self.STD = (
+#             None
+#             if self.ALL is None
+#             else empty_list_std if len(self.ALL) == 0 else np.std(self.ALL)
+#         )
+
+#     def __getitem__(self, mode: MetricMode | str):
+#         if self.error:
+#             raise MetricCouldNotBeComputedException(
+#                 f"Metric {self.id} has not been calculated, add it to your eval_metrics"
+#             )
+#         if isinstance(mode, MetricMode):
+#             mode = mode.name
+#         if hasattr(self, mode):
+#             return getattr(self, mode)
+#         else:
+#             raise MetricCouldNotBeComputedException(
+#                 f"List_Metric {self.id} does not contain {mode} member"
+#             )
 
 
 if __name__ == "__main__":

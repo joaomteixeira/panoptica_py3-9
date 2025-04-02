@@ -2,7 +2,7 @@ import numpy as np
 from panoptica.metrics import Metric
 from panoptica.utils.constants import _Enum_Compare, auto
 from panoptica.utils.config import SupportsConfig
-
+import typing
 
 class EdgeCaseResult(_Enum_Compare):
     """Enumeration of edge case values used for handling specific metric situations.
@@ -83,11 +83,11 @@ class MetricZeroTPEdgeCaseHandling(SupportsConfig):
 
     def __init__(
         self,
-        default_result: EdgeCaseResult | None = None,
-        no_instances_result: EdgeCaseResult | None = None,
-        empty_prediction_result: EdgeCaseResult | None = None,
-        empty_reference_result: EdgeCaseResult | None = None,
-        normal: EdgeCaseResult | None = None,
+        default_result: typing.Optional[EdgeCaseResult]  = None,
+        no_instances_result: typing.Optional[EdgeCaseResult]  = None,
+        empty_prediction_result: typing.Optional[EdgeCaseResult]  = None,
+        empty_reference_result: typing.Optional[EdgeCaseResult]  = None,
+        normal: typing.Optional[EdgeCaseResult]  = None,
     ) -> None:
         assert default_result is not None or (
             no_instances_result is not None
@@ -117,7 +117,7 @@ class MetricZeroTPEdgeCaseHandling(SupportsConfig):
 
     def __call__(
         self, tp: int, num_pred_instances, num_ref_instances
-    ) -> tuple[bool, float | None]:
+    ) -> typing.Tuple[bool, typing.Optional[float]]:
         if tp != 0:
             return False, EdgeCaseResult.NONE.value
         #
@@ -214,7 +214,7 @@ class EdgeCaseHandler(SupportsConfig):
         tp: int,
         num_pred_instances: int,
         num_ref_instances: int,
-    ) -> tuple[bool, float | None]:
+    ) -> typing.Tuple[bool, typing.Optional[float]]:
         """_summary_
 
         Args:
@@ -249,7 +249,7 @@ class EdgeCaseHandler(SupportsConfig):
     def get_metric_zero_tp_handle(self, metric: Metric):
         return self.__listmetric_zeroTP_handling[metric]
 
-    def handle_empty_list_std(self) -> EdgeCaseResult | None:
+    def handle_empty_list_std(self) -> typing.Optional[EdgeCaseResult]:
         return self.__empty_list_std
 
     def __str__(self) -> str:

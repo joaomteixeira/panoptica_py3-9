@@ -1,6 +1,6 @@
 import numpy as np
 from skimage.morphology import skeletonize, skeletonize_3d
-
+import typing
 
 def cl_score(volume: np.ndarray, skeleton: np.ndarray):
     """Computes the skeleton volume overlap
@@ -18,8 +18,8 @@ def cl_score(volume: np.ndarray, skeleton: np.ndarray):
 def _compute_centerline_dice(
     ref_labels: np.ndarray,
     pred_labels: np.ndarray,
-    ref_instance_idx: int | None = None,
-    pred_instance_idx: int | None = None,
+    ref_instance_idx: typing.Optional[int] = None,
+    pred_instance_idx: typing.Optional[int] = None,
 ) -> float:
     """Compute the centerline Dice (clDice) coefficient between a specific pair of instances.
 

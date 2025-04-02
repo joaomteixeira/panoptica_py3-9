@@ -2,7 +2,7 @@ import numpy as np
 from panoptica.utils.config import SupportsConfig
 
 #
-
+import typing
 
 class LabelGroup(SupportsConfig):
     """Defines a group of labels that semantically belong together for segmentation purposes.
@@ -17,7 +17,7 @@ class LabelGroup(SupportsConfig):
 
     def __init__(
         self,
-        value_labels: list[int] | int,
+        value_labels: typing.Union[typing.List[int], int],
         single_instance: bool = False,
     ) -> None:
         """Initializes a LabelGroup with specified labels and single instance setting.
@@ -119,7 +119,7 @@ class LabelMergeGroup(LabelGroup):
     """
 
     def __init__(
-        self, value_labels: list[int] | int, single_instance: bool = False
+        self, value_labels: typing.Union[typing.List[int], int], single_instance: bool = False
     ) -> None:
         super().__init__(value_labels, single_instance)
 

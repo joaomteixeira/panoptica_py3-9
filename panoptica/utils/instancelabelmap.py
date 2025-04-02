@@ -1,6 +1,6 @@
 import numpy as np
 
-
+import typing
 # Many-to-One Mapping
 class InstanceLabelMap(object):
     """Creates a mapping between prediction labels and reference labels in a many-to-one relationship.
@@ -27,7 +27,7 @@ class InstanceLabelMap(object):
     def __init__(self) -> None:
         self.labelmap = {}
 
-    def add_labelmap_entry(self, pred_labels: list[int] | int, ref_label: int):
+    def add_labelmap_entry(self, pred_labels: typing.Union[typing.List[int], int], ref_label: int):
         """Adds an entry that maps prediction labels to a single reference label.
 
         Args:
@@ -86,7 +86,7 @@ class InstanceLabelMap(object):
         return ref_label in self.labelmap.values()
 
     def contains_and(
-        self, pred_label: int | None = None, ref_label: int | None = None
+        self, pred_label: typing.Optional[int]  = None, ref_label: typing.Optional[int]  = None
     ) -> bool:
         """Checks if both a prediction and a reference label are in the map.
 
@@ -102,7 +102,7 @@ class InstanceLabelMap(object):
         return pred_in and ref_in
 
     def contains_or(
-        self, pred_label: int | None = None, ref_label: int | None = None
+        self, pred_label: typing.Optional[int]  = None, ref_label: typing.Optional[int]  = None
     ) -> bool:
         """Checks if either a prediction or reference label is in the map.
 

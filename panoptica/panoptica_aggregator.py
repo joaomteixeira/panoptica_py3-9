@@ -9,7 +9,7 @@ import os
 import atexit
 import warnings
 import tempfile
-
+import typing
 # Set start method based on the operating system
 try:
     if os.name == "posix":
@@ -40,7 +40,7 @@ class Panoptica_Aggregator:
     def __init__(
         self,
         panoptica_evaluator: Panoptica_Evaluator,
-        output_file: Path | str,
+        output_file: typing.Union[Path , str],
         log_times: bool = False,
         continue_file: bool = True,
     ):
@@ -215,7 +215,7 @@ class Panoptica_Aggregator:
         return self.__evaluation_metrics
 
 
-def _read_first_row(file: str | Path):
+def _read_first_row(file: typing.Union[str , Path]):
     """Reads the first row of a TSV file.
 
     NOT THREAD SAFE BY ITSELF!
@@ -241,7 +241,7 @@ def _read_first_row(file: str | Path):
     return row
 
 
-def _load_first_column_entries(file: str | Path):
+def _load_first_column_entries(file: typing.Union[str , Path]):
     """Loads the entries from the first column of a TSV file.
 
     NOT THREAD SAFE BY ITSELF!
@@ -272,7 +272,7 @@ def _load_first_column_entries(file: str | Path):
     return id_list
 
 
-def _write_content(file: str | Path, content: list[list[str]]):
+def _write_content(file: typing.Union[str , Path], content: list[list[str]]):
     """Writes content to a TSV file.
 
     Args:

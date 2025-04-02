@@ -2,10 +2,13 @@ import os
 import warnings
 from itertools import chain
 from pathlib import Path
+import typing
 
-
-def search_path(
-    basepath: str | Path, query: str, verbose: bool = False, suppress: bool = False
+def your_function(
+    basepath: typing.Union[str, Path],
+    query: str,
+    verbose: bool = False,
+    suppress: bool = False,
 ) -> list[Path]:
     """Searches from basepath with query
     Args:

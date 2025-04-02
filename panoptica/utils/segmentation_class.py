@@ -2,7 +2,7 @@ import numpy as np
 from pathlib import Path
 from panoptica.utils.config import SupportsConfig
 from panoptica.utils.label_group import LabelGroup, _LabelGroupAny
-
+import typing
 NO_GROUP_KEY = "ungrouped"
 
 
@@ -25,7 +25,7 @@ class SegmentationClassGroups(SupportsConfig):
 
     def __init__(
         self,
-        groups: list[LabelGroup] | dict[str, LabelGroup | tuple[list[int] | int, bool]],
+        groups: typing.Union[typing.List[LabelGroup], typing.Dict[str, typing.Union[LabelGroup, typing.Tuple[typing.Union[typing.List[int], int], bool]]]],
     ) -> None:
         self.__group_dictionary: dict[str, LabelGroup] = {}
         self.__labels: list[int] = []
@@ -58,7 +58,7 @@ class SegmentationClassGroups(SupportsConfig):
         self.__labels = labels
 
     def has_defined_labels_for(
-        self, arr: np.ndarray | list[int], raise_error: bool = False
+        self, arr: typing.Union[np.ndarray, typing.List[int]], raise_error: bool = False
     ):
         """Checks if the labels in the provided array are defined in the segmentation class groups.
 
@@ -146,7 +146,7 @@ class _NoSegmentationClassGroups(SegmentationClassGroups):
         self.__group_dictionary = {NO_GROUP_KEY: _LabelGroupAny()}
 
     def has_defined_labels_for(
-        self, arr: np.ndarray | list[int], raise_error: bool = False
+        self, arr: typing.Union[np.ndarray, typing.List[int]], raise_error: bool = False
     ):
         return True
 

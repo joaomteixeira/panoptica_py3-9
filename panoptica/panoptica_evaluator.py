@@ -1,5 +1,5 @@
 from time import perf_counter
-
+import typing
 from panoptica.instance_approximator import InstanceApproximator
 from panoptica.instance_evaluator import evaluate_matched_instance
 from panoptica.instance_matcher import InstanceMatchingAlgorithm
@@ -30,10 +30,10 @@ class Panoptica_Evaluator(SupportsConfig):
     def __init__(
         self,
         expected_input: InputType = InputType.MATCHED_INSTANCE,
-        instance_approximator: InstanceApproximator | None = None,
-        instance_matcher: InstanceMatchingAlgorithm | None = None,
-        edge_case_handler: EdgeCaseHandler | None = None,
-        segmentation_class_groups: SegmentationClassGroups | None = None,
+        instance_approximator: typing.Optional[InstanceApproximator] = None,
+        instance_matcher: typing.Optional[InstanceMatchingAlgorithm] = None  ,
+        edge_case_handler: typing.Optional[EdgeCaseHandler] = None,
+        segmentation_class_groups: typing.Optional[SegmentationClassGroups] = None,
         instance_metrics: list[Metric] = [
             Metric.DSC,
             Metric.IOU,
@@ -41,8 +41,8 @@ class Panoptica_Evaluator(SupportsConfig):
             Metric.RVD,
         ],
         global_metrics: list[Metric] = [Metric.DSC],
-        decision_metric: Metric | None = None,
-        decision_threshold: float | None = None,
+        decision_metric: typing.Optional[Metric] = None,
+        decision_threshold: typing.Optional[float] = None,
         save_group_times: bool = False,
         log_times: bool = False,
         verbose: bool = False,
@@ -117,9 +117,9 @@ class Panoptica_Evaluator(SupportsConfig):
         prediction_arr: np.ndarray,
         reference_arr: np.ndarray,
         result_all: bool = True,
-        save_group_times: bool | None = None,
-        log_times: bool | None = None,
-        verbose: bool | None = None,
+        save_group_times: typing.Optional[bool] = None,
+        log_times: typing.Optional[bool] = None,
+        verbose: typing.Optional[bool] = None,
     ) -> dict[str, PanopticaResult]:
         processing_pair = self.__expected_input(prediction_arr, reference_arr)
         assert isinstance(
@@ -188,8 +188,8 @@ class Panoptica_Evaluator(SupportsConfig):
         label_group: LabelGroup,
         processing_pair,
         result_all: bool = True,
-        verbose: bool | None = None,
-        log_times: bool | None = None,
+        verbose: typing.Optional[bool] = None,
+        log_times: typing.Optional[bool] = None,
         save_group_times: bool = False,
     ) -> PanopticaResult:
         assert isinstance(label_group, LabelGroup)
@@ -232,14 +232,14 @@ class Panoptica_Evaluator(SupportsConfig):
 
 
 def panoptic_evaluate(
-    input_pair: SemanticPair | UnmatchedInstancePair | MatchedInstancePair,
-    instance_approximator: InstanceApproximator | None = None,
-    instance_matcher: InstanceMatchingAlgorithm | None = None,
+    input_pair: typing.Union[SemanticPair , UnmatchedInstancePair , MatchedInstancePair],
+    instance_approximator: typing.Optional[InstanceApproximator] = None,
+    instance_matcher: typing.Optional[InstanceMatchingAlgorithm] = None,
     instance_metrics: list[Metric] = [Metric.DSC, Metric.IOU, Metric.ASSD],
     global_metrics: list[Metric] = [Metric.DSC],
-    decision_metric: Metric | None = None,
-    decision_threshold: float | None = None,
-    edge_case_handler: EdgeCaseHandler | None = None,
+    decision_metric: typing.Optional[Metric] = None,
+    decision_threshold: typing.Optional[float] = None,
+    edge_case_handler: typing.Optional[EdgeCaseHandler] = None,
     log_times: bool = False,
     result_all: bool = True,
     verbose=False,
@@ -385,11 +385,11 @@ def panoptic_evaluate(
 
 
 def _handle_zero_instances_cases(
-    processing_pair: UnmatchedInstancePair | MatchedInstancePair,
+    processing_pair: typing.Union[UnmatchedInstancePair , MatchedInstancePair],
     edge_case_handler: EdgeCaseHandler,
     global_metrics: list[Metric],
     eval_metrics: list[Metric] = [Metric.DSC, Metric.IOU, Metric.ASSD],
-) -> UnmatchedInstancePair | MatchedInstancePair | PanopticaResult:
+) -> typing.Union[UnmatchedInstancePair , MatchedInstancePair , PanopticaResult]:
     """
     Handle edge cases when comparing reference and prediction masks.
 

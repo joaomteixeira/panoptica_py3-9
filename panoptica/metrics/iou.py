@@ -1,11 +1,11 @@
 import numpy as np
-
+import typing
 
 def _compute_instance_iou(
     reference_arr: np.ndarray,
     prediction_arr: np.ndarray,
-    ref_instance_idx: int | None = None,
-    pred_instance_idx: int | None = None,
+    ref_instance_idx: typing.Optional[int] = None,
+    pred_instance_idx: typing.Optional[int] = None,
 ) -> float:
     """
     Compute Intersection over Union (IoU) between a specific pair of reference and prediction instances.

@@ -7,7 +7,7 @@ from panoptica.utils.config import (
 )
 from pathlib import Path
 import numpy as np
-
+import typing
 
 class _Enum_Compare(Enum):
     """An extended Enum class that supports additional comparison and YAML configuration functionality.
@@ -62,14 +62,14 @@ class _Enum_Compare(Enum):
         _register_class_to_yaml(cls)
 
     @classmethod
-    def load_from_config(cls, path: str | Path):
+    def load_from_config(cls, path: typing.Union[str , Path]):
         return _load_from_config(cls, path)
 
     @classmethod
     def load_from_config_name(cls, name: str):
         return _load_from_config_name(cls, name)
 
-    def save_to_config(self, path: str | Path):
+    def save_to_config(self, path: typing.Union[str , Path]):
         _save_to_config(self, path)
 
     @classmethod

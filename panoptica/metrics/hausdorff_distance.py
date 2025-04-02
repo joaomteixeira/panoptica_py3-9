@@ -1,13 +1,13 @@
 import numpy as np
 from scipy.spatial import cKDTree
 from panoptica.metrics.assd import __surface_distances
-
+import typing
 
 def _compute_instance_hausdorff_distance(
     ref_labels: np.ndarray,
     pred_labels: np.ndarray,
-    ref_instance_idx: int | None = None,
-    pred_instance_idx: int | None = None,
+    ref_instance_idx:typing.Optional[int] = None,
+    pred_instance_idx: typing.Optional[int] = None,
     voxelspacing=None,
     connectivity=1,
 ):
@@ -68,8 +68,8 @@ def _compute_hausdorff_distance(
 def _compute_instance_hausdorff_distance95(
     ref_labels: np.ndarray,
     pred_labels: np.ndarray,
-    ref_instance_idx: int | None = None,
-    pred_instance_idx: int | None = None,
+    ref_instance_idx: typing.Optional[int] = None,
+    pred_instance_idx: typing.Optional[int] = None,
     voxelspacing=None,
     connectivity=1,
 ):

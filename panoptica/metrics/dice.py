@@ -1,11 +1,12 @@
 import numpy as np
 
+import typing
 
 def _compute_instance_volumetric_dice(
     ref_labels: np.ndarray,
     pred_labels: np.ndarray,
-    ref_instance_idx: int | None = None,
-    pred_instance_idx: int | None = None,
+    ref_instance_idx: typing.Optional[int] = None,
+    pred_instance_idx: typing.Optional[int] = None,
 ) -> float:
     """
     Compute the Dice coefficient between a specific pair of instances.

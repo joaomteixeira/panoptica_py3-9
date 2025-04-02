@@ -2,6 +2,7 @@ import itertools
 import warnings
 
 import numpy as np
+import typing
 
 
 def _unique_without_zeros(arr: np.ndarray) -> np.ndarray:
@@ -65,7 +66,7 @@ def _get_smallest_fitting_uint(max_value: int) -> type:
 
 def _get_bbox_nd(
     img: np.ndarray,
-    px_dist: int | tuple[int, ...] = 0,
+    px_dist: typing.Union[int, tuple[int, ...]] = 0,
 ) -> tuple[slice, ...]:
     """calculates a bounding box in n dimensions given a image (factor ~2 times faster than compute_crop_slice)
 

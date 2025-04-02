@@ -1,6 +1,6 @@
 from multiprocessing import Pool
 import numpy as np
-
+import typing
 from panoptica.metrics import Metric
 from panoptica.utils.processing_pair import MatchedInstancePair, EvaluateInstancePair
 from panoptica._functionals import _get_paired_crop
@@ -9,8 +9,8 @@ from panoptica._functionals import _get_paired_crop
 def evaluate_matched_instance(
     matched_instance_pair: MatchedInstancePair,
     eval_metrics: list[Metric] = [Metric.DSC, Metric.IOU, Metric.ASSD],
-    decision_metric: Metric | None = Metric.IOU,
-    decision_threshold: float | None = None,
+    decision_metric: typing.Optional[Metric] = Metric.IOU,
+    decision_threshold: typing.Optional[float] = None,
     **kwargs,
 ) -> EvaluateInstancePair:
     """

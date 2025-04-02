@@ -2,6 +2,7 @@ import csv
 import numpy as np
 from pathlib import Path
 import numpy as np
+import typing
 
 try:
     import pandas as pd
@@ -282,7 +283,7 @@ class Panoptica_Statistic:
     def get_summary_figure(
         self,
         metric: str,
-        manual_metric_range: None | tuple[float, float] = None,
+        manual_metric_range: typing.Optional[typing.Tuple[float, float]] = None,
         name_method: str = "Structure",
         horizontal: bool = True,
         sort: bool = True,
@@ -320,28 +321,28 @@ class Panoptica_Statistic:
 
 
 def make_autc_plots(
-    statistics_dict: dict[str | int | float, Panoptica_Statistic],
+    statistics_dict: typing.Dict[typing.Union[str, int, float], Panoptica_Statistic],
     metric: str,
-    groups: list[str] | str | None = None,
-    alternate_groupnames: list[str] | str | None = None,
+    groups: typing.Optional[typing.Union[typing.List[str], str]] = None,
+    alternate_groupnames: typing.Optional[typing.Union[typing.List[str], str]] = None,
 ):
     raise NotImplementedError("AUTC plots currently in works")
 
 
 def make_curve_over_setups(
-    statistics_dict: dict[str | int | float, Panoptica_Statistic],
+    statistics_dict: typing.Dict[typing.Union[str, int, float], Panoptica_Statistic],
     metric: str,
-    groups: list[str] | str | None = None,
-    alternate_groupnames: list[str] | str | None = None,
-    fig: go.Figure | None = None,
+    groups: typing.Optional[typing.Union[typing.List[str], str]] = None,
+    alternate_groupnames: typing.Optional[typing.Union[typing.List[str], str]] = None,
+    fig: typing.Optional[go.Figure] = None,
     plot_as_barchart=True,
     plot_std: bool = True,
     figure_title: str = "",
     width: int = 850,
     height: int = 1200,
-    xaxis_title: str | None = None,
-    yaxis_title: str | None = None,
-    manual_metric_range: None | tuple[float, float] = None,
+    xaxis_title: typing.Optional[str] = None,
+    yaxis_title: typing.Optional[str] = None,
+    manual_metric_range: typing.Optional[typing.Tuple[float, float]] = None,
 ):
     # TODO make this flexibel whether the second grouping are the groups or metrics?
     if groups is None:
@@ -445,7 +446,7 @@ def plot_box(
     figure_title: str = "",
     width=850,
     height=1200,
-    manual_metric_range: None | tuple[float, float] = None,
+    manual_metric_range: typing.Optional[typing.Tuple[float, float]] = None,
 ):
     xaxis_title = name_metric if orientation_horizontal else name_method
     yaxis_title = name_metric if not orientation_horizontal else name_method

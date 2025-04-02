@@ -1,7 +1,7 @@
 from abc import ABC
 
 import numpy as np
-
+import typing
 from panoptica._functionals import _get_paired_crop
 from panoptica.utils import _count_unique_without_zeros, _unique_without_zeros
 from panoptica.utils.constants import _Enum_Compare
@@ -167,8 +167,8 @@ class _ProcessingPairInstanced(_ProcessingPair):
         self,
         prediction_arr: np.ndarray,
         reference_arr: np.ndarray,
-        n_prediction_instance: int | None = None,
-        n_reference_instance: int | None = None,
+        n_prediction_instance: typing.Optional[int] = None,
+        n_reference_instance:typing.Optional[int] = None,
     ) -> None:
         """Initializes a processing pair for instances.
 
@@ -203,7 +203,7 @@ class _ProcessingPairInstanced(_ProcessingPair):
 
 
 def _check_array_integrity(
-    prediction_arr: np.ndarray, reference_arr: np.ndarray, dtype: type | None = None
+    prediction_arr: np.ndarray, reference_arr: np.ndarray, dtype: typing.Optional[type] = None
 ):
     """Validates integrity between two arrays, checking shape, dtype, and consistency with `dtype`.
 
@@ -265,8 +265,8 @@ class UnmatchedInstancePair(_ProcessingPairInstanced):
         self,
         prediction_arr: np.ndarray,
         reference_arr: np.ndarray,
-        n_prediction_instance: int | None = None,
-        n_reference_instance: int | None = None,
+        n_prediction_instance: typing.Optional[int] = None,
+        n_reference_instance: typing.Optional[int] = None,
     ) -> None:
         super().__init__(
             prediction_arr,
@@ -296,11 +296,11 @@ class MatchedInstancePair(_ProcessingPairInstanced):
         self,
         prediction_arr: np.ndarray,
         reference_arr: np.ndarray,
-        missed_reference_labels: list[int] | None = None,
-        missed_prediction_labels: list[int] | None = None,
-        matched_instances: list[int] | None = None,
-        n_prediction_instance: int | None = None,
-        n_reference_instance: int | None = None,
+        missed_reference_labels: typing.Optional[typing.List[int]] = None,
+        missed_prediction_labels: typing.Optional[typing.List[int]] = None,
+        matched_instances: typing.Optional[typing.List[int]] = None,
+        n_prediction_instance: typing.Optional[int] = None,
+        n_reference_instance: typing.Optional[int] = None,
     ) -> None:
         """Initializes a MatchedInstancePair
 
@@ -423,7 +423,7 @@ class IntermediateStepsData:
         _intermediatesteps (dict[str, _ProcessingPair]): Dictionary of intermediate processing steps.
     """
 
-    def __init__(self, original_input: _ProcessingPair | None):
+    def __init__(self, original_input: typing.Optional[_ProcessingPair]):
         self._original_input = original_input
         self._intermediatesteps: dict[str, _ProcessingPair] = {}
 

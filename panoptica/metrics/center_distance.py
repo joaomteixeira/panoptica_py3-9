@@ -1,6 +1,6 @@
 import numpy as np
 from scipy.ndimage import center_of_mass
-
+import typing
 
 def _compute_center_of_mass(arr: np.ndarray):
     # enforce binary
@@ -12,8 +12,8 @@ def _compute_center_of_mass(arr: np.ndarray):
 def _compute_instance_center_distance(
     ref_labels: np.ndarray,
     pred_labels: np.ndarray,
-    ref_instance_idx: int | None = None,
-    pred_instance_idx: int | None = None,
+    ref_instance_idx: typing.Optional[int] = None,
+    pred_instance_idx: typing.Optional[int] = None,
     voxelspacing=None,
 ) -> float:
     """
